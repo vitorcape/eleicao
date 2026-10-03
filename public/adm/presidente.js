@@ -148,7 +148,6 @@ function enviarParaPlanilha() {
     const totalVotos = nulosBrancos + resultados.reduce((acc, cand) => acc + parseInt(cand.votos), 0);
     const votosValidos = totalVotos - nulosBrancos;
 
-    const urlPrincipal = "https://api.steinhq.com/v1/storages/67265bf0c0883333654a1cd7/Presidente";
     const dadosParaEnviar = resultados.map(cand => ({
         PresidenteVotosNulosBrancos: nulosBrancos,
         PresidenteVotosValidos: votosValidos,
@@ -159,42 +158,21 @@ function enviarParaPlanilha() {
         PresidentePorcentagem: cand.porcentagem,
         PresidenteImagem: cand.imagem,
         PresidenteNPC: cand.npc,
+        // Dados cadastrais que vão para a tabela pública de candidatos
+        Candidato: cand.nome,
+        Partido: cand.partido,
+        Imagem: cand.imagem,
+        CandidatoCor: cand.cor,
     }));
 
-    // Enviando para a primeira planilha
-    fetch(urlPrincipal, {
+    apiAdmin("envios/presidente", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
         body: JSON.stringify(dadosParaEnviar)
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Dados enviados para o Stein com sucesso:", data);
-        // Enviando para a segunda planilha com informações selecionadas
-        const urlSecundaria = "https://api.steinhq.com/v1/storages/67267f05c0883333654a2351/Presidente";
-        const dadosParaEnviarSecundaria = resultados.map(cand => ({
-            Candidato: cand.nome,
-            Partido: cand.partido,
-            Imagem: cand.imagem,
-            CandidatoCor: cand.cor,
-        }));
-
-        return fetch(urlSecundaria, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dadosParaEnviarSecundaria)
-        });
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Dados enviados para a segunda planilha com sucesso:", data);
+    .then(() => {
         Swal.fire({
             title: "Enviado!",
-            text: "Dados enviados para ambas as planilhas",
+            text: "Dados salvos no banco de dados",
             icon: "success",
             showConfirmButton: false,
             timer: 2500
@@ -204,7 +182,7 @@ function enviarParaPlanilha() {
         console.error("Erro ao enviar dados:", error);
         Swal.fire({
             title: "Erro!",
-            text: "Erro ao enviar dados. Verifique o console para mais detalhes.",
+            text: `Erro ao enviar dados: ${error.message}`,
             icon: "error",
             showConfirmButton: false,
             timer: 2500

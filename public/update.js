@@ -1,10 +1,10 @@
-// URL da API do OpenSheet para a sua planilha
-const sheetUrl = "https://opensheet.elk.sh/1T_r486_3eFo3izRUVLrW8r6vEBAGMsVkvAIWN872C80/UPDATE";
+// Endpoint do Worker (D1) com os avisos de atualização
+const sheetUrl = "/api/update";
 
 // Objetos para armazenar os Toasts
 let toastObjects = {};
 
-// Função para buscar dados da planilha e exibir em Toasts
+// Função para buscar dados da API e exibir em Toasts
 async function fetchData() {
     try {
         const response = await fetch(sheetUrl);
@@ -63,10 +63,11 @@ async function fetchData() {
                     toastElement.setAttribute("aria-atomic", "true");
 
                     // Conteúdo do Toast com DataHora, Estado e Código do Estado
+                    const [pagina, ancora] = estadoURL.split("#");
                     toastElement.innerHTML = `
-                            <a href="./${estadoURL}.html" class="text-decoration-none text-body">
+                            <a href="/${pagina}.html${ancora ? "#" + ancora : ""}" class="text-decoration-none text-body">
                             <div class="toast-header">
-                                <object class="justify-align-center me-2" type="image/svg+xml" data="./svg/${estadoCode}-square-rounded.svg" width="20" height="20"></object>
+                                <object class="justify-align-center me-2" type="image/svg+xml" data="/svg/${estadoCode}-square-rounded.svg" width="20" height="20"></object>
                                 <strong class="me-auto poppins fs-6">Nova atualização!</strong>
                             </div>
                             <div class="toast-body">
@@ -97,7 +98,7 @@ async function fetchData() {
             }
         });
     } catch (error) {
-        console.error("Erro ao buscar dados da planilha:", error);
+        console.error("Erro ao buscar dados da API:", error);
     }
 }
 

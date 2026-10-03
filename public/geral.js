@@ -17,7 +17,7 @@ function highlightActiveLink() {
 window.onload = highlightActiveLink;
 
 async function fetchData() {
-    const url = 'https://opensheet.elk.sh/1T_r486_3eFo3izRUVLrW8r6vEBAGMsVkvAIWN872C80/Presidente'; // URL corrigida
+    const url = '/api/presidente';
 
     try {
         const response = await fetch(url);
@@ -131,12 +131,12 @@ function displayElectionInfo(data) {
     subtituloDiv.innerHTML = SubTitulo;
 
     // Calcula os votos nulos e brancos
-    const votoNuloBranco = parseInt(data[0].VotoNuloBranco.replace(/\./g, '')) || 0;
+    const votoNuloBranco = parseInt((data[0].VotoNuloBranco || '0').replace(/\./g, '')) || 0;
 
     // Calcula os votos válidos somando os votos de todos os candidatos
     let votosValidos = 0;
     data.forEach(candidato => {
-        const votos = parseInt(candidato.Voto.replace(/\./g, '')) || 0;
+        const votos = parseInt((candidato.Voto || '0').replace(/\./g, '')) || 0;
         votosValidos += votos;
     });
 
@@ -160,8 +160,8 @@ function displayElectionInfo(data) {
 
     // Ordena os candidatos em ordem decrescente com base no número de votos
     data.sort((a, b) => {
-        const votosA = parseInt(a.Voto.replace(/\./g, '').replace(',', '.')) || 0;
-        const votosB = parseInt(b.Voto.replace(/\./g, '').replace(',', '.')) || 0;
+        const votosA = parseInt((a.Voto || '0').replace(/\./g, '').replace(',', '.')) || 0;
+        const votosB = parseInt((b.Voto || '0').replace(/\./g, '').replace(',', '.')) || 0;
     
         // Verifica qual campo deve ser usado para a ordenação
         const porcentagemA = parseFloat(a.CandidatoPorcentagem) || ((votosA / votosValidos) * 100);

@@ -1,6 +1,6 @@
 async function fetchData() {
     try {
-        const response = await fetch('https://opensheet.elk.sh/1T_r486_3eFo3izRUVLrW8r6vEBAGMsVkvAIWN872C80/Dashboard');
+        const response = await fetch('/api/dashboard');
         if (!response.ok) {
             throw new Error('Erro na rede');
         }
@@ -35,14 +35,14 @@ function displayCandidateInfo(data) {
 
         // Calcular o total de votos do estado
         const totalVotosEstado = candidatosEstado.reduce((sum, candidato) => {
-            const votos = parseInt(candidato.CandidatoVoto.replace(/\./g, '').replace(',', '.')) || 0;
+            const votos = parseInt((candidato.CandidatoVoto || '0').replace(/\./g, '').replace(',', '.')) || 0;
             return sum + votos;
         }, 0);
 
         // Ordenar candidatos por votos em ordem decrescente
         candidatosEstado.sort((a, b) => {
-            const votosA = parseInt(a.CandidatoVoto.replace(/\./g, '').replace(',', '.')) || 0;
-            const votosB = parseInt(b.CandidatoVoto.replace(/\./g, '').replace(',', '.')) || 0;
+            const votosA = parseInt((a.CandidatoVoto || '0').replace(/\./g, '').replace(',', '.')) || 0;
+            const votosB = parseInt((b.CandidatoVoto || '0').replace(/\./g, '').replace(',', '.')) || 0;
             return votosB - votosA;
         });
 
