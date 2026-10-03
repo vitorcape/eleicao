@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="h-100">
+<head>
+    <title>BRRPG: Dados da Apuração</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Vitor Capelli">
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/7957d4766d.js" crossorigin="anonymous"></script>
+    <link href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet"></link>
+    <link href="https://kit-pro.fontawesome.com/releases/v6.1.1/css/pro.min.css" rel="stylesheet"></link>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
+</head>
+<style>
+    .montserrat {
+        font-family: Montserrat;
+    }
+
+    .poppins {
+        font-family: Poppins;
+    }
+
+    #tabela input.form-control,
+    #tabela select.form-select {
+        min-width: 110px;
+    }
+
+    #tabela textarea {
+        min-width: 320px;
+        font-family: monospace;
+        font-size: .8rem;
+    }
+</style>
+
+<body class="bg-light">
+    <main class="container-fluid px-lg-5">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <a href="/adm/menu.html"
+                class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none text-reset">
+                <img src="/img/logo.png" class="rounded me-2" height="32"></img>
+                <span class="fs-4 montserrat"></span>
+            </a>
+            <ul class="nav nav-pills poppins">
+                <li class="nav-item"><a href="/adm/menu.html" class="nav-link text-reset">Menu</a></li>
+                <li class="nav-item"><a href="/adm/presidente.html" class="nav-link text-reset">Presidente</a>
+                </li>
+                <li class="nav-item"><a href="/adm/estado.html" class="nav-link text-reset">Estadual</a></li>
+                <li class="nav-item"><a href="/adm/camara.html" class="nav-link text-reset">Câmara</a></li>
+                <li class="nav-item"><a href="/adm/senado.html" class="nav-link text-reset">Senado</a></li>
+                <li class="nav-item"><a href="/adm/dados.html" class="nav-link text-reset">Dados</a></li>
+                <li class="nav-item"><a href="/adm/manual.html" class="nav-link text-reset">Manual</a></li>
+            </ul>
+        </header>
+        <div class="py-4 text-center montserrat">
+            <h2>BRASIL-RPG</h2>
+            <h4>Dados da Apuração (Cloudflare D1)</h4>
+        </div>
+        <div class="alert alert-info mb-4" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            Aqui você edita o que antes era editado direto na planilha: porcentagem apurada, votos exibidos,
+            status dos candidatos, cores do mapa e avisos de atualização. As alterações aparecem no site em poucos segundos.
+        </div>
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+            <select id="seletor-tabela" class="form-select w-auto"></select>
+            <button class="btn btn-outline-primary" onclick="carregarTabela()"><i class="fas fa-sync me-1"></i>Recarregar</button>
+            <button class="btn btn-outline-secondary ms-auto" onclick="sairAdmin(); location.reload()"><i class="fas fa-sign-out-alt me-1"></i>Sair</button>
+        </div>
+        <p id="descricao-tabela" class="text-muted"></p>
+        <div class="table-responsive">
+            <table id="tabela" class="table table-sm align-middle bg-white"></table>
+        </div>
+    </main>
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 px-5 my-5 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+            <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                <img src="/img/logo.png" class="rounded" height="56"></img>
+            </a>
+            <div class="ms-2">
+                <h4 class="mb-3 mb-md-0 text-body-secondary montserrat">BRASIL-RPG</h4>
+                <p class="mb-0 fs-6"><i class="fa-regular fa-code me-1"></i>Desenvolvido por Vitor Capelli</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="api.js"></script>
+    <script src="dados.js"></script>
+</body>
+</html>

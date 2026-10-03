@@ -314,29 +314,24 @@ function enviarParaPlanilha() {
         }))
     ];
 
-    fetch(`https://api.steinhq.com/v1/storages/67265bf0c0883333654a1cd7/Camara`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+    apiAdmin("envios/camara", {
+        method: "POST",
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(result => {
-        console.log('Dados enviados para o Stein:', result);
+    .then(() => {
         Swal.fire({
             title: "Enviado!",
-            text: "Dados enviados para o Stein",
+            text: "Dados salvos no banco de dados",
             icon: "success",
             showConfirmButton: false,
             timer: 2500
         });
     })
     .catch(error => {
-        console.error('Erro ao enviar dados para o Google Sheets:', error);
+        console.error("Erro ao enviar dados:", error);
         Swal.fire({
-            title: "Erro",
-            text: "Erro ao enviar dados para o Google Sheets",
+            title: "Erro!",
+            text: `Erro ao enviar dados: ${error.message}`,
             icon: "error",
             showConfirmButton: false,
             timer: 2500

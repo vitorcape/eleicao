@@ -27,10 +27,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const title = document.getElementById("title");
     let dadosVotacao = []; // Armazena os dados da planilha
 
-    // Função para buscar dados da planilha
+    // Função para buscar dados da API
     async function fetchData() {
         try {
-            const response = await fetch('https://opensheet.elk.sh/1T_r486_3eFo3izRUVLrW8r6vEBAGMsVkvAIWN872C80/Estado');
+            const response = await fetch('/api/estado');
             if (!response.ok) {
                 throw new Error('Erro na rede');
             }
@@ -88,14 +88,14 @@ document.addEventListener("DOMContentLoaded", function () {
             const candidatos = dados.filter(item => item.Estado === estado);
             const votoNuloBranco = dados.find(item => item.EstadoVotoNuloBranco === estado);
             const totalVotos = candidatos.reduce((sum, candidate) => {
-                return sum + (candidate.Voto ? parseInt(candidate.Voto.replace(/\./g, '')) || 0 : 0);
+                return sum + (candidate.Voto ? parseInt((candidate.Voto || '0').replace(/\./g, '')) || 0 : 0);
             }, 0);
             const totalVotos1 = totalVotos + (votoNuloBranco?.VotoNuloBranco ? parseInt(votoNuloBranco.VotoNuloBranco.replace(/\./g, '')) || 0 : 0);
 
             // Colorir o mapa com base nos dados da planilha
             const proporcoes = {};
             candidatos.forEach(candidate => {
-                const votos = parseInt(candidate.Voto.replace(/\./g, '')) || 0;
+                const votos = parseInt((candidate.Voto || '0').replace(/\./g, '')) || 0;
                 const percentage = (votos / totalVotos1) * 100;
                 if (candidate.CandidatoCor) {
                     proporcoes[candidate.CandidatoCor] = (proporcoes[candidate.CandidatoCor] || 0) + percentage;
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Soma os votos de todos os candidatos do estado
-        const totalVotos = candidatos.reduce((sum, candidate) => sum + (parseInt(candidate.Voto.replace(/\./g, '')) || 0), 0);
+        const totalVotos = candidatos.reduce((sum, candidate) => sum + (parseInt((candidate.Voto || '0').replace(/\./g, '')) || 0), 0);
 
         // Total de votos com nulos e brancos
         const totalVotos1 = totalVotos + votoNuloBranco;
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const DataHora = data[0].DataHora;
 
         const candidatosHTML = candidatos.map(candidate => {
-            const votosCandidato = parseInt(candidate.Voto.replace(/\./g, '')) || 0;
+            const votosCandidato = parseInt((candidate.Voto || '0').replace(/\./g, '')) || 0;
             const porcentagem = totalVotos > 0 ? ((votosCandidato / totalVotos) * 100).toFixed(2) : '0.00'; // Garante duas casas decimais
         
             return {

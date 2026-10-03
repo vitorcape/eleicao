@@ -206,8 +206,6 @@ function calcularDistribuicao() {
 }
 
 function enviarParaPlanilha() {
-    const url = "https://api.steinhq.com/v1/storages/67265bf0c0883333654a1cd7/Estado";
-
     // Obtém dados das variáveis globais
     const resultados = window.resultadosParaEnvio || [];
     const nulos = window.nulosParaEnvio || {};
@@ -224,7 +222,8 @@ function enviarParaPlanilha() {
         Porcentagem: cand.porcentagem,
         Estado: cand.estado,
         Imagem: cand.imagem,
-        NPC: cand.npc
+        NPC: cand.npc,
+        CandidatoCor: cand.cor
     })).filter(dado => dado.Candidato);
 
     if (dadosParaEnviar.length === 0) {
@@ -239,50 +238,24 @@ function enviarParaPlanilha() {
         return;
     }
 
-    fetch(url, {
+    apiAdmin("envios/estado", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
         body: JSON.stringify(dadosParaEnviar)
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Dados enviados para o Stein com sucesso:", data);
-        
-        // Enviando para a segunda planilha com informações selecionadas
-        const urlSecundaria = "https://api.steinhq.com/v1/storages/67267f05c0883333654a2351/Estado";
-        const dadosParaEnviarSecundaria = resultados.map(cand => ({
-            Candidato: cand.nome,
-            Partido: cand.partido,
-            Imagem: cand.imagem,
-            Estado: cand.estado,
-            CandidatoCor: cand.cor
-        }));
-
-        return fetch(urlSecundaria, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dadosParaEnviarSecundaria)
-        });
-    })
-    .then(data => {
-        console.log("Dados enviados para o Stein com sucesso:", data);
+    .then(() => {
         Swal.fire({
             title: "Enviado!",
-            text: "Dados enviados para a planilha com sucesso",
+            text: "Dados salvos no banco de dados",
             icon: "success",
             showConfirmButton: false,
             timer: 2500
         });
     })
     .catch(error => {
-        console.error("Erro ao enviar dados para a planilha:", error);
+        console.error("Erro ao enviar dados:", error);
         Swal.fire({
             title: "Erro!",
-            text: "Erro ao enviar dados. Verifique o console para mais detalhes.",
+            text: `Erro ao enviar dados: ${error.message}`,
             icon: "error",
             showConfirmButton: false,
             timer: 2500
